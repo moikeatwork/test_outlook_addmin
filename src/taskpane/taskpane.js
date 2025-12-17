@@ -11,7 +11,7 @@ export async function archiveEmail(identifier, identifierType) {
     }
 
     // Get the email ID (EWS ID format)
-    const messageId = item.itemId;
+    const messageId = Office.context.mailbox.item.itemId;
     
     if (!messageId) {
       throw new Error("Unable to get message ID");
