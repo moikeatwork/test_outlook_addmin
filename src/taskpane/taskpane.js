@@ -1,8 +1,38 @@
 /* global Office console */
 
-export async function archiveEmail(identifier, identifierType) {
+import { authService } from './authService';
+
+export async function searchAccounts(query) {
   try {
-    // Get email metadata
+    if (query.length < 2) {
+      return { success: true, results: [] };
+    }
+
+    const userEmail = Office.context.mailbox.userProfile.emailAddress;
+
+    const response = await authService.makeAuthenticatedRequest('/search_accounts', {
+      method: 'POST',
+      body: JSON.stringify({ 
+        query: query,
+        userEmail: userEmail
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`Search failed: ${response.status} ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    return { success: true, results: data.results || [] };
+
+  } catch (error) {
+    console.error("Search error:", error);
+    return { success: false, error: error.message, results: [] };
+  }
+}
+
+export async function archiveEmail(accountId, accountName) {
+  try {
     const item = Office.context.mailbox.item;
     const userEmail = Office.context.mailbox.userProfile.emailAddress;
     
@@ -10,32 +40,26 @@ export async function archiveEmail(identifier, identifierType) {
       throw new Error("No email item found");
     }
 
-    // Get the email ID (EWS ID format)
-    const messageId = Office.context.mailbox.item.itemId;
+    const messageId = item.itemId;
     
     if (!messageId) {
       throw new Error("Unable to get message ID");
     }
 
-    // Prepare webhook payload
     const payload = {
       messageId: messageId,
       userPrincipalName: userEmail,
-      identifierType: identifierType, // "domain" or "accountName"
-      identifier: identifier
+      accountId: accountId,
+      accountName: accountName
     };
 
-    // Call N8N webhook
-    const response = await fetch("https://workflows.prostarpics.com/webhook-test/archive_sugarcrm", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+    const response = await authService.makeAuthenticatedRequest('/archive_sugarcrm', {
+      method: 'POST',
       body: JSON.stringify(payload)
     });
 
     if (!response.ok) {
-      throw new Error(`Webhook failed: ${response.status} ${response.statusText}`);
+      throw new Error(`Archive failed: ${response.status} ${response.statusText}`);
     }
 
     const result = await response.json();
