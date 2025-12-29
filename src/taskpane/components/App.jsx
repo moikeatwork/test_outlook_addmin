@@ -24,32 +24,37 @@ import { authService } from "../authService";
 const useStyles = makeStyles({
   root: {
     minHeight: "100vh",
-    padding: "20px",
+    padding: "24px",
+    display: "flex",
+    flexDirection: "column",
   },
   header: {
-    fontSize: tokens.fontSizeHero800,
+    fontSize: tokens.fontSizeHero700,
     fontWeight: tokens.fontWeightSemibold,
-    marginBottom: "10px",
+    marginBottom: "8px",
     color: tokens.colorBrandForeground1,
+    lineHeight: "1.2",
   },
   authBadge: {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    padding: "8px 12px",
-    backgroundColor: tokens.colorNeutralBackground3,
-    borderRadius: tokens.borderRadiusMedium,
-    fontSize: tokens.fontSizeBase200,
-    color: tokens.colorNeutralForeground2,
-    marginBottom: "30px",
+    padding: "6px 10px",
+    backgroundColor: tokens.colorNeutralBackground2,
+    borderRadius: tokens.borderRadiusSmall,
+    fontSize: tokens.fontSizeBase100,
+    color: tokens.colorNeutralForeground3,
+    marginBottom: "24px",
+    alignSelf: "flex-start",
   },
   form: {
     display: "flex",
     flexDirection: "column",
-    gap: "20px",
+    gap: "16px",
+    flex: 1,
   },
   submitButton: {
-    marginTop: "10px",
+    marginTop: "4px",
   },
   messageBar: {
     marginTop: "20px",
@@ -129,17 +134,17 @@ const App = (props) => {
 
   return (
     <div className={styles.root}>
-      <h1 className={styles.header}>Archive to SugarCRM</h1>
+      <h1 className={styles.header}>Archive Email</h1>
       
       <div className={styles.authBadge}>
-        <ShieldCheckmark24Regular style={{ color: tokens.colorPaletteGreenForeground1 }} />
-        <span>Authenticated as {userEmail}</span>
+        <ShieldCheckmark24Regular />
+        <span>{userEmail}</span>
       </div>
 
       <div className={styles.form}>
         <Field 
-          label="Search Account"
-          hint="Type to search for accounts in CRM"
+          label="Account"
+          hint="Type to search CRM accounts"
         >
           <Combobox
             placeholder="Start typing account name..."
