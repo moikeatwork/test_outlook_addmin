@@ -4,13 +4,13 @@ import { authService } from './authService';
 
 export async function searchAccounts(query) {
   try {
-    if (query.length < 2) {
+    if (query.length < 3) {
       return { success: true, results: [] };
     }
 
     const userEmail = Office.context.mailbox.userProfile.emailAddress;
 
-    const response = await authService.makeAuthenticatedRequest('/search_accounts', {
+    const response = await authService.makeAuthenticatedRequest('/search-accounts', {
       method: 'POST',
       body: JSON.stringify({ 
         query: query,
@@ -53,7 +53,7 @@ export async function archiveEmail(accountId, accountName) {
       accountName: accountName
     };
 
-    const response = await authService.makeAuthenticatedRequest('/archive_sugarcrm', {
+    const response = await authService.makeAuthenticatedRequest('/archive-sugarcrm', {
       method: 'POST',
       body: JSON.stringify(payload)
     });

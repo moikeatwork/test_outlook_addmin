@@ -82,7 +82,7 @@ const App = (props) => {
 
   // Debounced search
   useEffect(() => {
-    if (searchQuery.length < 2) {
+    if (searchQuery.length < 3) {
       setSearchResults([]);
       return;
     }
